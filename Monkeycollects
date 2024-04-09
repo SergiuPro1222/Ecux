@@ -9,12 +9,8 @@ local DENDRITE_FOLDER = "DendriteFarmingSimulator"
 
 if not isfolder(DENDRITE_FOLDER) then
     makefolder(DENDRITE_FOLDER)
-    local dendriteFile = io.open(DENDRITE_FOLDER..'/last.txt', 'w')
-    dendriteFile:write(tostring(0))
-    dendriteFile:close()
-    local dendriteFile2 = io.open(DENDRITE_FOLDER..'/looted.txt', 'w')
-    dendriteFile2:write('[]')
-    dendriteFile2:close()
+    writefile(DENDRITE_FOLDER..'/last.txt', tostring(0))
+    writefile(DENDRITE_FOLDER..'/looted.txt', '[]')
 end
 
 task.spawn(function()
@@ -49,100 +45,93 @@ local dendriteCharacter = dendriteLocalPlayer.Character or dendriteLocalPlayer.C
 local dendriteRootPart
 
 function add_dendrite_looted(jobid)
-   local dendriteFile = io.open(DENDRITE_FOLDER..'/looted.txt', 'r+')
-   local dendriteLootedData = dendriteHttp:JSONDecode(dendriteFile:read())
-   dendriteLootedData[jobid] = tick()
-   dendriteFile:seek("set", 0)
-   dendriteFile:write(dendriteHttp:JSONEncode(dendriteLootedData))
-   dendriteFile:close()
+    local dendriteLootedData = dendriteHttp:JSONDecode(readfile(DENDRITE_FOLDER..'/looted.txt'))
+    dendriteLootedData[jobid] = tick()
+    writefile(DENDRITE_FOLDER..'/looted.txt', dendriteHttp:JSONEncode(dendriteLootedData))
 end
 
 function get_dendrite_eggs()
-   local dendriteEggs = {}
-   for i,v in next, workspace.Ignored:GetChildren() do
-      if v.Name:match('^Egg') then
-         table.insert(dendriteEggs, v)
-      end
-   end
-   return dendriteEggs
+    local dendriteEggs = {}
+    for i,v in next, workspace.Ignored:GetChildren() do
+        if v.Name:match('^Egg') then
+            table.insert(dendriteEggs, v)
+        end
+    end
+    return dendriteEggs
 end
 
 function collect_dendrite_eggs()
-   local dendriteEggs = get_dendrite_eggs()
-   print(#dendriteEggs, 'eggs found')
-   for i,v in next, dendriteEggs do
-      firetouchinterest(dendriteRootPart, v, 0)
-      firetouchinterest(dendriteRootPart, v, 1)
-      print('Egg collected')
-   end
+    local dendriteEggs = get_dendrite_eggs()
+    print(#dendriteEggs, 'eggs found')
+    for i,v in next, dendriteEggs do
+        firetouchinterest(dendriteRootPart, v, 0)
+        firetouchinterest(dendriteRootPart, v, 1)
+        print('Egg collected')
+    end
 end
 
 function refresh_dendrite_cache()
-   print('Refreshing server cache')
+    print('Refreshing server cache')
 
-   local dendriteServers = {}
-   local dendritePage
+    local dendriteServers = {}
+    local dendritePage
 
-   repeat
-      local dendriteResponse = dendriteHttp:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/'.. game.PlaceId ..'/servers/Public?sortOrder=Dsc&limit=100' .. (dendritePage and '&cursor=' .. dendritePage or '')))
-      for idx, dendriteServer in next, dendriteResponse.data do
-         table.insert(dendriteServers, dendriteServer)
-      end
-      dendritePage = dendriteResponse.nextPageCursor
-   until not dendritePage
+    repeat
+        local dendriteResponse = dendriteHttp:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/'.. game.PlaceId ..'/servers/Public?sortOrder=Dsc&limit=100' .. (dendritePage and '&cursor=' .. dendritePage or '')))
+        for idx, dendriteServer in next, dendriteResponse.data do
+            table.insert(dendriteServers, dendriteServer)
+        end
+        dendritePage = dendriteResponse.nextPageCursor
+    until not dendritePage
 
-   local dendriteFile = io.open(DENDRITE_FOLDER..'/last.txt', 'w')
-   dendriteFile:write(tostring(tick()))
-   dendriteFile:close()
-   
-   local dendriteFile2 = io.open(DENDRITE_FOLDER..'/server_cache.txt', 'w')
-   dendriteFile2:write(dendriteHttp:JSONEncode(dendriteServers))
-   dendriteFile2:close()
+    writefile(DENDRITE_FOLDER..'/last.txt', tostring(tick()))
+    writefile(DENDRITE_FOLDER..'/server_cache.txt', dendriteHttp:JSONEncode(dendriteServers))
 end
+
 function teleport_to_new_dendrite_server()
-   local dendriteFile = io.open(DENDRITE_FOLDER..'/server_cache.txt', 'r')
-   local dendriteServers = dendriteHttp:JSONDecode(dendriteFile:read())
-   dendriteFile:close()
-   local dendriteFile2 = io.open(DENDRITE_FOLDER..'/looted.txt', 'r')
-   local dendriteLooted = dendriteHttp:JSONDecode(dendriteFile2:read())
-   dendriteFile2:close()
-   while task.wait(0.5) do
-      print(('Searching %s available servers...'):format(#dendriteServers))
-      for idx, dendriteServer in next, dendriteServers do
-         if (
-         (dendriteServer.id ~= game.JobId) and
-         (tick() - (dendriteLooted[dendriteServer.id] or 0) > 3600) and
-         (dendriteServer.playing) and
-         (dendriteServer.playing > 15) and
-         (dendriteServer.playing < 35) ) then
-            add_dendrite_looted(dendriteServer.id)
-            print(("Teleporting to new server '%s' with %s/%s players"):format(dendriteServer.id, dendriteServer.playing, dendriteServer.maxPlayers))
+    local dendriteServers = dendriteHttp:JSONDecode(readfile(DENDRITE_FOLDER..'/server_cache.txt'))
+    local dendriteLooted = dendriteHttp:JSONDecode(readfile(DENDRITE_FOLDER..'/looted.txt'))
+    while task.wait(0.5) do
+        print(('Searching %s available servers...'):format(#dendriteServers))
+        for idx, dendriteServer in next, dendriteServers do
+            if (
+                (dendriteServer.id ~= game.JobId) and
+                (tick() - (dendriteLooted[dendriteServer.id] or 0) > 3600) and
+                (dendriteServer.playing) and
+                (dendriteServer.playing > 15) and
+                (dendriteServer.playing < 35) ) then
+                add_dendrite_looted(dendriteServer.id)
+                print(("Teleporting to new server '%s' with %s/%s players"):format(dendriteServer.id, dendriteServer.playing, dendriteServer.maxPlayers))
 
-            xpcall(function()
-                dendriteTeleportService:TeleportToPlaceInstance(game.PlaceId, dendriteServer.id)
+                xpcall(function()
+                    dendriteTeleportService:TeleportToPlaceInstance(game.PlaceId, dendriteServer.id)
                 end, function()
-                print('Teleport error, retrying')
-                teleport_to_new_dendrite_server()
-            end)
+                    print('Teleport error, retrying')
+                    teleport_to_new_dendrite_server()
+                end)
 
-            return
-         end
-      end
-   end
+                return
+            end
+        end
+    end
 end
+
 if #get_dendrite_eggs() == 0 then
-   print('Server has 0 eggs, skipping')
+    print('Server has 0 eggs, skipping')
 else
-   print('Waiting for character to load...')
-   dendriteCharacter:WaitForChild('FULLY_LOADED_CHAR')
-   dendriteRootPart = dendriteCharacter:WaitForChild('HumanoidRootPart')
-   collect_dendrite_eggs()
+    print('Waiting for character to load...')
+    dendriteCharacter:WaitForChild('FULLY_LOADED_CHAR')
+    dendriteRootPart = dendriteCharacter:WaitForChild('HumanoidRootPart')
+    collect_dendrite_eggs()
 end
-if tick() - tonumber(io.open(DENDRITE_FOLDER..'/last.txt', 'r'):read()) > 120 then
-   refresh_dendrite_cache()
+
+if tick() - tonumber(readfile(DENDRITE_FOLDER..'/last.txt')) > 120 then
+    refresh_dendrite_cache()
 end
+
 dendriteTeleportService.TeleportInitFailed:Connect(function()
     print('Teleport error, retry')
     teleport_to_new_dendrite_server()
 end)
+
 teleport_to_new_dendrite_server()
