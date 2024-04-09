@@ -1,6 +1,6 @@
 local dendrite_queue_on_teleport = syn and syn.queue_on_teleport or false
 
-local dendrite_queue_main = game:HttpGet("https://pastebin.com/raw/AiL8et2t")
+local dendrite_queue_main = game:HttpGet("https://raw.githubusercontent.com/SergiuPro1222/Ecux/main/Monkeycollects")
 if dendrite_queue_on_teleport then
     dendrite_queue_on_teleport(dendrite_queue_main)
 end
