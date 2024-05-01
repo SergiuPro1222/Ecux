@@ -1,0 +1,1074 @@
+if game.PlaceId == 2788229376 then
+local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
+if not game:IsLoaded() then
+	game.Loaded:Wait()
+end
+
+local Window = Rayfield:CreateWindow({
+    Name = "Anti-DH",
+    LoadingTitle = "Anti-DH",
+    LoadingSubtitle = "by Anti-911 Community",
+    ConfigurationSaving = {
+       Enabled = true,
+       FolderName = nil, -- Create a custom folder for your hub/game
+       FileName = "Anti-DH"
+    },
+    Discord = {
+       Enabled = false,
+       Invite = "HKGdngJGcd", -- The Discord invite code, do not include discord.gg/
+       RememberJoins = false -- Set this to false to make them join the discord every time they load it up
+    },
+    KeySystem = false, -- Set this to true to use our key system
+    KeySettings = {
+       Title = "Anti-DH",
+       Subtitle = "Key System",
+       Note = "Welcome To Anti-DH Enjoy.",
+       FileName = "Anti-DH-Key",
+       SaveKey = true,
+       GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
+       Key = "Sergey"
+    }
+ })
+ loadstring(game:HttpGet("https://pastebin.com/raw/nzXicwc1", true))() --chatspyer 
+
+
+ Rayfield:Notify({
+    Title = "Anti-911",
+    Content = "Welcome To Anti-DH!",
+    Duration = 2.5,
+    Image = 0,
+    Actions = { -- Notification Buttons
+       Ignore = {
+          Name = "Hey!",
+          Callback = function()
+          print("Welcome To Anti-DH!")
+       end
+    },
+ },
+ })
+
+ local TabMain = Window:CreateTab("Anti-DH") -- Title, Image
+ local SectionMain = TabMain:CreateSection("Anti-DH")
+ SectionMain:Set("Main | Anti-DH Menu")
+---- fly  ----
+local FlyButton = TabMain:CreateButton({
+   Name = "Fly",
+   Callback = function()
+      local flight
+      local plr = game.Players.LocalPlayer
+      IYMouse = plr:GetMouse()
+      IYMouse.KeyDown:connect(function(key)
+         if key == "x" then
+            if flight then
+               flight = false
+               fly()
+            else
+               flight = true
+               NOFLY()
+            end
+         end
+      end)
+
+      for i,v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+         if v:IsA("BasePart") and v.CanCollide == true then
+            v.CanCollide = false
+         end
+      end
+
+      FLYING = false
+      QEfly = true
+      iyflyspeed = 3
+      vehicleflyspeed = 3
+      function sFLY(vfly)
+         repeat wait() until game.Players.LocalPlayer and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild('Humanoid')
+         repeat wait() until IYMouse
+
+         local T = game.Players.LocalPlayer.Character.LowerTorso
+         local CONTROL = {F = 0, B = 0, L = 0, R = 0, Q = 0, E = 0}
+         local lCONTROL = {F = 0, B = 0, L = 0, R = 0, Q = 0, E = 0}
+         local SPEED = 5
+
+         local function FLY()
+            FLYING = true
+            local BG = Instance.new('BodyGyro', T)
+            local BV = Instance.new('BodyVelocity', T)
+            BG.P = 9e4
+            BG.maxTorque = Vector3.new(9e9, 9e9, 9e9)
+            BG.cframe = T.CFrame
+            BV.velocity = Vector3.new(0, 0, 0)
+            BV.maxForce = Vector3.new(9e9, 9e9, 9e9)
+            spawn(function()
+               repeat wait()
+                  if not vfly and game.Players.LocalPlayer.Character:FindFirstChildOfClass('Humanoid') then
+                     game.Players.LocalPlayer.Character:FindFirstChildOfClass('Humanoid').PlatformStand = true
+                  end
+                  if CONTROL.L + CONTROL.R ~= 0 or CONTROL.F + CONTROL.B ~= 0 or CONTROL.Q + CONTROL.E ~= 0 then
+                     SPEED = 50
+                  elseif not (CONTROL.L + CONTROL.R ~= 0 or CONTROL.F + CONTROL.B ~= 0 or CONTROL.Q + CONTROL.E ~= 0) and SPEED ~= 0 then
+                     SPEED = 0
+                  end
+                  if (CONTROL.L + CONTROL.R) ~= 0 or (CONTROL.F + CONTROL.B) ~= 0 or (CONTROL.Q + CONTROL.E) ~= 0 then
+                     BV.velocity = ((workspace.CurrentCamera.CoordinateFrame.lookVector * (CONTROL.F + CONTROL.B)) + ((workspace.CurrentCamera.CoordinateFrame * CFrame.new(CONTROL.L + CONTROL.R, (CONTROL.F + CONTROL.B + CONTROL.Q + CONTROL.E) * 0.2, 0).p) - workspace.CurrentCamera.CoordinateFrame.p)) * SPEED
+                     lCONTROL = {F = CONTROL.F, B = CONTROL.B, L = CONTROL.L, R = CONTROL.R}
+                  elseif (CONTROL.L + CONTROL.R) == 0 and (CONTROL.F + CONTROL.B) == 0 and (CONTROL.Q + CONTROL.E) == 0 and SPEED ~= 0 then
+                     BV.velocity = ((workspace.CurrentCamera.CoordinateFrame.lookVector * (lCONTROL.F + lCONTROL.B)) + ((workspace.CurrentCamera.CoordinateFrame * CFrame.new(lCONTROL.L + lCONTROL.R, (lCONTROL.F + lCONTROL.B + CONTROL.Q + CONTROL.E) * 0.2, 0).p) - workspace.CurrentCamera.CoordinateFrame.p)) * SPEED
+                  else
+                     BV.velocity = Vector3.new(0, 0, 0)
+                  end
+                  BG.cframe = workspace.CurrentCamera.CoordinateFrame
+               until not FLYING
+               CONTROL = {F = 0, B = 0, L = 0, R = 0, Q = 0, E = 0}
+               lCONTROL = {F = 0, B = 0, L = 0, R = 0, Q = 0, E = 0}
+               SPEED = 0
+               BG:destroy()
+               BV:destroy()
+               if game.Players.LocalPlayer.Character:FindFirstChildOfClass('Humanoid') then
+                  game.Players.LocalPlayer.Character:FindFirstChildOfClass('Humanoid').PlatformStand = false
+               end
+            end)
+         end
+         IYMouse.KeyDown:connect(function(KEY)
+            if KEY:lower() == 'w' then
+               if vfly then
+                  CONTROL.F = vehicleflyspeed
+               else
+                  CONTROL.F = iyflyspeed
+               end
+            elseif KEY:lower() == 's' then
+               if vfly then
+                  CONTROL.B = - vehicleflyspeed
+               else
+                  CONTROL.B = - iyflyspeed
+               end
+            elseif KEY:lower() == 'a' then
+               if vfly then
+                  CONTROL.L = - vehicleflyspeed
+               else
+                  CONTROL.L = - iyflyspeed
+               end
+            elseif KEY:lower() == 'd' then 
+               if vfly then
+                  CONTROL.R = vehicleflyspeed
+               else
+                  CONTROL.R = iyflyspeed
+               end
+            elseif QEfly and KEY:lower() == 'e' then
+               if vfly then
+                  CONTROL.Q = vehicleflyspeed*2
+               else
+                  CONTROL.Q = iyflyspeed*2
+               end
+            elseif QEfly and KEY:lower() == 'q' then
+               if vfly then
+                  CONTROL.E = -vehicleflyspeed*2
+               else
+                  CONTROL.E = -iyflyspeed*2
+               end
+            end
+         end)
+         IYMouse.KeyUp:connect(function(KEY)
+            if KEY:lower() == 'w' then
+               CONTROL.F = 0
+            elseif KEY:lower() == 's' then
+               CONTROL.B = 0
+            elseif KEY:lower() == 'a' then
+               CONTROL.L = 0
+            elseif KEY:lower() == 'd' then
+               CONTROL.R = 0
+            elseif KEY:lower() == 'e' then
+               CONTROL.Q = 0
+            elseif KEY:lower() == 'q' then
+               CONTROL.E = 0
+            end
+         end)
+         FLY()
+      end
+
+      function NOFLY()
+         FLYING = false
+         game.Players.LocalPlayer.Character:FindFirstChildOfClass('Humanoid').PlatformStand = false
+      end
+
+      function fly()
+         NOFLY()
+         wait()
+         sFLY()
+      end
+      Rayfield:Notify({
+         Title = "Anti-DH",
+         Content = "Fly is now activated! Press X To Use.",
+         Duration = 3.0})
+   end,
+})
+
+----SilentAim----------
+local silentaimButton = TabMain:CreateButton({
+   Name = "Silent Aim",
+   Callback = function()
+    -----Indev----
+      Rayfield:Notify({
+         Title = "Anti-DH",
+         Content = "We are working on this. SOON!",
+         Duration = 3.0})
+   end,
+})
+
+----aimlocker----------
+local aimlockButton = TabMain:CreateButton({
+   Name = "AimLock",
+   Callback = function()
+    -----Indev----
+      Rayfield:Notify({
+         Title = "Anti-DH",
+         Content = "We are working on this. SOON!",
+         Duration = 3.0})
+   end,
+})
+
+-------------GODMODE-------------
+local GodModeButton = TabMain:CreateButton({
+   Name = "GodMode",
+   Callback = function()
+      local localPlayer = game:GetService('Players').LocalPlayer;
+      local localCharacter = localPlayer.Character;
+      for i, v in pairs(localCharacter:GetDescendants()) do
+         if v:IsA("BasePart") then
+            v:Destroy()
+         end
+      end
+      local newCharacter = localPlayer.CharacterAdded:Wait();
+      local spoofFolder = Instance.new('Folder');
+      spoofFolder.Name = 'FULLY_LOADED_CHAR';
+      spoofFolder.Parent = newCharacter;
+      newCharacter:WaitForChild('RagdollConstraints'):Destroy();
+      local spoofValue = Instance.new('BoolValue', newCharacter);
+      spoofValue.Name = 'RagdollConstraints';
+      local name = game.Players.LocalPlayer.Name
+      local lol =    game.Workspace:WaitForChild(name)
+      local money = Instance.new("Folder",game.Players.LocalPlayer.Character);money.Name = "FULLY_LOADED_CHAR"
+      lol.Parent = game.Workspace.Players
+      game.Players.LocalPlayer.Character:WaitForChild("BodyEffects")
+      game.Players.LocalPlayer.Character.BodyEffects.BreakingParts:Destroy()
+      Rayfield:Notify({
+         Title = "Anti-DH",
+         Content = "GodMode is now activated!",
+         Duration = 3.0})
+   end,
+})
+
+----------------
+local GodblockButton = TabMain:CreateButton({
+   Name = "GodBlock",
+   Callback = function()
+local localPlayer = game:GetService('Players').LocalPlayer;
+local localCharacter = localPlayer.Character;
+for i, v in pairs(localCharacter:GetDescendants()) do
+   if v:IsA("BasePart") then
+      v:Destroy()
+   end
+end
+local newCharacter = localPlayer.CharacterAdded:Wait();
+local spoofFolder = Instance.new('Folder');
+spoofFolder.Name = 'FULLY_LOADED_CHAR';
+spoofFolder.Parent = newCharacter;
+newCharacter:WaitForChild('RagdollConstraints'):Destroy();
+local spoofValue = Instance.new('BoolValue', newCharacter);
+spoofValue.Name = 'RagdollConstraints';
+wait()
+--godblock/godbullet
+local ps = game:GetService("Players")
+local lp = ps.LocalPlayer
+local char = lp.Character
+
+char.BodyEffects.Armor:Destroy()
+char.BodyEffects.Defense:Destroy()
+
+local Clone1 = Instance.new("IntValue")
+Clone1.Name = "Armor"
+Clone1.Parent = char.BodyEffects
+
+local Clone2 = Instance.new("NumberValue")
+Clone2.Name = "Defense"
+Clone2.Parent = char.BodyEffects
+Rayfield:Notify({
+   Title = "Anti-DH",
+   Content = "GodBlock is now activated!",
+   Duration = 3.0})
+   end,
+})
+------------GODARMOR------------
+local GodArmorButton = TabMain:CreateButton({
+   Name = "GodArmor",
+   Callback = function()
+      Rayfield:Notify({
+         Title = "Anti-DH",
+         Content = "GodArmor is in work currently!",
+         Duration = 2.0})
+   end,
+})
+
+----------Noclip--------
+local NoclipButton = TabMain:CreateButton({
+   Name = "Noclip(KEY)",
+   Callback = function()
+      ---SOON---
+      Rayfield:Notify({
+         Title = "Anti-DH",
+         Content = "Noclip will be added SOON!",
+         Duration = 2.0})
+   end,
+})
+
+--------resetforce------
+local resetfButton = TabMain:CreateButton({
+   Name = "Force Reset",
+   Callback = function()
+      for i, v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+         if v:IsA("BasePart") then
+            v:Destroy()
+         end
+      end
+      Rayfield:Notify({
+         Title = "Anti-DH",
+         Content = "You got reseted!",
+         Duration = 3.0})
+   end,
+})
+
+-----------MaskNames-----
+local MaskShowButton = TabMain:CreateButton({
+   Name = "Mask Names",
+   Callback = function()
+      for i,v in pairs(game.Workspace.Players:GetChildren()) do
+         v:FindFirstChildWhichIsA('Humanoid').DisplayDistanceType = 'Subject'
+      end
+      Rayfield:Notify({
+         Title = "Anti-DH",
+         Content = "They got unmasked!",
+         Duration = 3.0})
+   end,
+})
+
+------------freecam--------
+local FCamfButton = TabMain:CreateButton({
+   Name = "FreeCam",
+   Callback = function()
+      loadstring(game:HttpGet('https://pastebin.com/raw/6ngxJT8b'))()
+      Rayfield:Notify({
+         Title = "Anti-DH",
+         Content = "FreeCam is now Activated! LShift + P OFF/ON",
+         Duration = 3.5})
+   end,
+})
+
+------------------QUICKTP p -----------
+local TPpButton = TabMain:CreateButton({
+   Name = "Quick Tp [P]",
+   Callback = function()
+      plr = game.Players.LocalPlayer
+
+      hum = plr.Character.HumanoidRootPart
+      
+      mouse = plr:GetMouse()
+      
+      
+      
+      mouse.KeyDown:connect(function(key) -- curva your mom
+      
+         if key == "p" then 
+      
+            if mouse.Target then
+      
+               hum.CFrame = CFrame.new(mouse.Hit.x, mouse.Hit.y + 5, mouse.Hit.z)
+      
+            end
+      
+         end
+      end)
+      Rayfield:Notify({
+         Title = "Anti-DH",
+         Content = "Quick Teleport is now Activated! Press P to Teleport.",
+         Duration = 3.0})
+   end,
+})
+
+
+--------Animations-----
+local aNIMButton = TabMain:CreateButton({
+   Name = "Animations",
+   Callback = function()
+      loadstring(game:HttpGet('https://raw.githubusercontent.com/SergiuPro1222/yba/main/QuikeX/nodogskidder'))()
+      Rayfield:Notify({
+         Title = "Anti-DH",
+         Content = "Animations are now Activated!",
+         Duration = 3.0})
+   end,
+})
+
+-----korblox----------
+local korbloxButton = TabMain:CreateButton({
+   Name = "Korblox",
+   Callback = function()
+      local player = game.Players.LocalPlayer
+      game:GetService("Workspace").Players:FindFirstChild(player.Name).RightLowerLeg:Destroy()
+      game:GetService("Workspace").Players:FindFirstChild(player.Name).RightUpperLeg:Destroy()
+      game:GetService("Workspace").Players:FindFirstChild(player.Name).RightFoot:Destroy()
+      Rayfield:Notify({
+         Title = "Anti-DH",
+         Content = "You have now Korblox!  Still in dev..",
+         Duration = 3.0})
+   end,
+})
+
+-------headless---------
+local headlessButton = TabMain:CreateButton({
+   Name = "Headless",
+   Callback = function()
+      local player = game.Players.LocalPlayer
+      player.Character.Head:BreakJoints()
+      player.Character.Head.Position = Vector3.new(0,99999999999999,0)
+      Rayfield:Notify({
+         Title = "Anti-DH",
+         Content = "You are now Headless!  Still in dev..",
+         Duration = 3.0})
+   end,
+})
+-------------getgenv----box
+
+--------------cacat------------
+
+ local TabMods = Window:CreateTab("Mods") -- Title, Image
+ local SectionMods = TabMods:CreateSection("Mods")
+ SectionMods:Set("Toggle | Features Menu")
+
+------ANTISLOW----------
+ local AntiSlowToggle = TabMods:CreateToggle({
+    Name = "Anti Slow",
+    CurrentValue = false,
+    Flag = "Toggleslow", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    Callback = function(L_175_arg0)
+      local player = game.Players.LocalPlayer
+      antislow = L_175_arg0
+      local Loop
+      local loopFunction = function()
+          local DeletePart = player.Character.BodyEffects.Movement:FindFirstChild('NoJumping') or player.Character.BodyEffects.Movement:FindFirstChild('ReduceWalk') or player.Character.BodyEffects.Movement:FindFirstChild('NoWalkSpeed')
+          if DeletePart then DeletePart:Destroy() end
+          if player.Character.BodyEffects.Reload.Value == true then player.Character.BodyEffects.Reload.Value = false end
+      end;
+      local Start = function()
+          Loop = game:GetService("RunService").Heartbeat:Connect(loopFunction);
+      end;
+      local Pause = function()
+          Loop:Disconnect()
+      end;
+      Start()	
+      repeat wait() until antislow == false
+      Pause()
+    end
+ })
+
+----------ANTI STOMP------------------
+local AntiStompToggle = TabMods:CreateToggle({
+Name = "Anti Stomp",
+CurrentValue = false,
+Flag = "Togglestompav1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+Callback = function(sterp)
+-------- STILL TO MAKE IN FEATURE PLEASE ------------- Sergiu note
+
+ end
+})
+
+-------------CASHAURA-----------
+local AntiCAToggle = TabMods:CreateToggle({
+   Name = "Cash Aura",
+   CurrentValue = false,
+   Flag = "Togglecashaura", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(cashaurav)
+      antiauras3 = cashaurav
+      local player = game.Players.LocalPlayer
+      local Loop
+      local loopFunction = function()
+          for i,v in pairs(game:GetService('Workspace')['Ignored']['Drop']:GetChildren()) do
+              if v:IsA('Part') then
+                  if (v.Position - player.Character.HumanoidRootPart.Position).Magnitude <= 12 then
+                      fireclickdetector(v:FindFirstChild('ClickDetector'))
+                  end
+              end
+          end
+      end;
+      local Start = function()
+          Loop = game:GetService("RunService").Heartbeat:Connect(loopFunction);
+      end;
+      local Pause = function()
+          Loop:Disconnect()
+      end;
+      Start()	
+      repeat wait() until antiauras3 == false
+      Pause()
+   end
+})
+
+----------ANTI STOMP------------------
+local ToggleEffects = TabMods:CreateToggle({
+   Name = "Anti Effects",
+   CurrentValue = false,
+   Flag = "Toggle1eft", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(effecter)
+      local player = game.Players.LocalPlayer
+      local Loop
+      local loopFunction = function()
+          local Particle = player.Character.UpperTorso:FindFirstChild('ElectricuteParticle') or player.Character.UpperTorso:FindFirstChild('FlamethrowerFireParticle')
+          if Particle then Particle:Destroy() end
+          for i,v in pairs(player.Character:FindFirstChildWhichIsA('Humanoid'):GetPlayingAnimationTracks()) do
+              if v.Animation.AnimationId == 'rbxassetid://5641749824' then
+                 v:Stop() 
+              end
+          end
+      end;
+      local Start = function()
+          Loop = game:GetService("RunService").Heartbeat:Connect(loopFunction);
+      end;
+      local Pause = function()
+          Loop:Disconnect()
+      end;
+      Start()	
+      repeat wait() until effecter == false
+      Pause()
+   end,
+})
+
+---------Anti-Grab------------------
+local Togglegraber = TabMods:CreateToggle({
+   Name = "Anti Grab",
+   CurrentValue = false,
+   Flag = "Toggle1grab", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(grabs)
+      local player = game.Players.LocalPlayer
+      local Loop
+      local loopFunction = function()
+          local GC = player.Character:FindFirstChild("GRABBING_CONSTRAINT")
+          if GC then
+              GC:Destroy()
+              wait(0.04)
+              player.Character:FindFirstChildWhichIsA('Humanoid').Sit = true
+          end
+      end;
+      local Start = function()
+          Loop = game:GetService("RunService").Heartbeat:Connect(loopFunction);
+      end;
+      local Pause = function()
+          Loop:Disconnect()
+      end;
+      Start()	
+      repeat wait() until grabs == false
+      Pause()
+   end,
+})
+
+--------------Anti*bag*******-------
+local Togglebags = TabMods:CreateToggle({
+   Name = "Anti Bag",
+   CurrentValue = false,
+   Flag = "Toggle1bagr", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(bagar)
+      local player = game.Players.LocalPlayer
+      local Loop
+      local loopFunction = function()
+          if player.Character:FindFirstChild('Christmas_Sock') then
+             player.Character:FindFirstChild('Christmas_Sock'):Destroy() 
+          end
+      end;
+      local Start = function()
+          Loop = game:GetService("RunService").Heartbeat:Connect(loopFunction);
+      end;
+      local Pause = function()
+          Loop:Disconnect()
+      end;
+      Start()	
+      repeat wait() until bagar == false
+      Pause()
+   end,
+})
+
+-----------------Reach-------------
+local Togglereacherp = TabMods:CreateToggle({
+   Name = "Reach",
+   CurrentValue = false,
+   Flag = "Toggle1reach", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(reacer)
+      Rayfield:Notify({
+         Title = "Anti-DH",
+         Content = "Still in work...",
+         Duration = 3.0})
+   end
+})
+
+-------------Spinbot-------------------
+local Togglespinar = TabMods:CreateToggle({
+   Name = "Spin",
+   CurrentValue = false,
+   Flag = "Toggle1spiner", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(spinners)
+      Rayfield:Notify({
+         Title = "Anti-DH",
+         Content = "Still in work...",
+         Duration = 3.0})
+   end
+})
+
+------------------FullBright--------------
+local ToggleFBfull = TabMods:CreateToggle({
+   Name = "FullBright",
+   CurrentValue = false,
+   Flag = "Toggle1brighterulf", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're _G.FullBrightEnabled = brighterusing configuration saving to ensure no overlaps
+   Callback = function(brighter)
+      if not _G.FullBrightExecuted then
+
+         _G.FullBrightEnabled = brighter == true
+      
+         _G.NormalLightingSettings = {
+            Brightness = game:GetService("Lighting").Brightness,
+            ClockTime = game:GetService("Lighting").ClockTime,
+            FogEnd = game:GetService("Lighting").FogEnd,
+            GlobalShadows = game:GetService("Lighting").GlobalShadows,
+            Ambient = game:GetService("Lighting").Ambient
+         }
+      
+         game:GetService("Lighting"):GetPropertyChangedSignal("Brightness"):Connect(function()
+            if game:GetService("Lighting").Brightness ~= 1 and game:GetService("Lighting").Brightness ~= _G.NormalLightingSettings.Brightness then
+               _G.NormalLightingSettings.Brightness = game:GetService("Lighting").Brightness
+               if not _G.FullBrightEnabled then
+                  repeat
+                     wait()
+                  until _G.FullBrightEnabled
+               end
+               game:GetService("Lighting").Brightness = 1
+            end
+         end)
+      
+         game:GetService("Lighting"):GetPropertyChangedSignal("ClockTime"):Connect(function()
+            if game:GetService("Lighting").ClockTime ~= 12 and game:GetService("Lighting").ClockTime ~= _G.NormalLightingSettings.ClockTime then
+               _G.NormalLightingSettings.ClockTime = game:GetService("Lighting").ClockTime
+               if not _G.FullBrightEnabled then
+                  repeat
+                     wait()
+                  until _G.FullBrightEnabled
+               end
+               game:GetService("Lighting").ClockTime = 12
+            end
+         end)
+      
+         game:GetService("Lighting"):GetPropertyChangedSignal("FogEnd"):Connect(function()
+            if game:GetService("Lighting").FogEnd ~= 786543 and game:GetService("Lighting").FogEnd ~= _G.NormalLightingSettings.FogEnd then
+               _G.NormalLightingSettings.FogEnd = game:GetService("Lighting").FogEnd
+               if not _G.FullBrightEnabled then
+                  repeat
+                     wait()
+                  until _G.FullBrightEnabled
+               end
+               game:GetService("Lighting").FogEnd = 786543
+            end
+         end)
+      
+         game:GetService("Lighting"):GetPropertyChangedSignal("GlobalShadows"):Connect(function()
+            if game:GetService("Lighting").GlobalShadows ~= false and game:GetService("Lighting").GlobalShadows ~= _G.NormalLightingSettings.GlobalShadows then
+               _G.NormalLightingSettings.GlobalShadows = game:GetService("Lighting").GlobalShadows
+               if not _G.FullBrightEnabled then
+                  repeat
+                     wait()
+                  until _G.FullBrightEnabled
+               end
+               game:GetService("Lighting").GlobalShadows = false
+            end
+         end)
+      
+         game:GetService("Lighting"):GetPropertyChangedSignal("Ambient"):Connect(function()
+            if game:GetService("Lighting").Ambient ~= Color3.fromRGB(178, 178, 178) and game:GetService("Lighting").Ambient ~= _G.NormalLightingSettings.Ambient then
+               _G.NormalLightingSettings.Ambient = game:GetService("Lighting").Ambient
+               if not _G.FullBrightEnabled then
+                  repeat
+                     wait()
+                  until _G.FullBrightEnabled
+               end
+               game:GetService("Lighting").Ambient = Color3.fromRGB(178, 178, 178)
+            end
+         end)
+      
+         game:GetService("Lighting").Brightness = 1
+         game:GetService("Lighting").ClockTime = 12
+         game:GetService("Lighting").FogEnd = 786543
+         game:GetService("Lighting").GlobalShadows = false
+         game:GetService("Lighting").Ambient = Color3.fromRGB(178, 178, 178)
+      
+         local LatestValue = true
+         spawn(function()
+            repeat
+               wait()
+            until _G.FullBrightEnabled
+            while wait() do
+               if _G.FullBrightEnabled ~= LatestValue then
+                  if not _G.FullBrightEnabled then
+                     game:GetService("Lighting").Brightness = _G.NormalLightingSettings.Brightness
+                     game:GetService("Lighting").ClockTime = _G.NormalLightingSettings.ClockTime
+                     game:GetService("Lighting").FogEnd = _G.NormalLightingSettings.FogEnd
+                     game:GetService("Lighting").GlobalShadows = _G.NormalLightingSettings.GlobalShadows
+                     game:GetService("Lighting").Ambient = _G.NormalLightingSettings.Ambient
+                  else
+                     game:GetService("Lighting").Brightness = 1
+                     game:GetService("Lighting").ClockTime = 12
+                     game:GetService("Lighting").FogEnd = 786543
+                     game:GetService("Lighting").GlobalShadows = false
+                     game:GetService("Lighting").Ambient = Color3.fromRGB(178, 178, 178)
+                  end
+                  LatestValue = not LatestValue
+               end
+            end
+         end)
+      end
+      
+      _G.FullBrightExecuted = true
+      _G.FullBrightEnabled = not _G.FullBrightEnabled
+end
+})
+
+
+-------------------NOGFX------------------
+local Buttongfxer = TabMods:CreateButton({
+   Name = "Low GFX",
+   Callback = function()
+      for _,v in pairs(workspace:GetDescendants()) do
+         if v.ClassName == "Part"
+         or v.ClassName == "SpawnLocation"
+         or v.ClassName == "WedgePart"
+         or v.ClassName == "Terrain"
+         or v.ClassName == "MeshPart" then
+         v.Material = "Plastic"
+         end
+         end
+         Rayfield:Notify({
+            Title = "Anti-DH",
+            Content = "Low GFX is now Activated!",
+            Duration = 3.0})
+   end,
+})
+
+-------------------norecolileCreateButtonr-----------------
+local Buttonrcls = TabMods:CreateButton({
+   Name = "No Recoil",
+   Callback = function()
+         Rayfield:Notify({
+            Title = "Anti-DH",
+            Content = "SOON!",
+            Duration = 3.0})
+   end,
+})
+-----------------------
+local TeleportsTab = Window:CreateTab("Teleports")
+local TeleportsSection = TeleportsTab:CreateSection("Teleports Menu")
+
+--------------------bank-----------------
+local teleportbank = TeleportsTab:CreateButton({
+   Name = "Bank",
+   Callback = function()
+      game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-482, 39, -283)
+   end,
+})
+
+----------------------Church------------------
+local teleportchhh = TeleportsTab:CreateButton({
+   Name = "Church",
+   Callback = function()
+      game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(205, 23, -68)
+   end,
+})
+
+-------casino--------------------------------------
+
+local casiner = TeleportsTab:CreateButton({
+   Name = "Casino",
+   Callback = function()
+      game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-900, 21, -141)
+   end,
+})
+
+-------polisce--------------------------------------
+
+local polis3 = TeleportsTab:CreateButton({
+   Name = "Police",
+   Callback = function()
+      game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-244, 21, -114)
+   end,
+})
+
+-------firedepartament--------------------------------------
+
+local firestati3on = TeleportsTab:CreateButton({
+   Name = "Fire Department",
+   Callback = function()
+      game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-129, 27, -98)
+   end,
+})
+
+-------circuser--------------------------------------
+
+local circustper = TeleportsTab:CreateButton({
+   Name = "Circus",
+   Callback = function()
+      game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(143, 24, -993)
+   end,
+})
+
+-------cinemas--------------------------------------
+
+local cine1rma = TeleportsTab:CreateButton({
+   Name = "Cinema",
+   Callback = function()
+      game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1006, 25, -147)
+   end,
+})
+
+-------bagser--------------------------------------
+
+local bagggerrrr3d = TeleportsTab:CreateButton({
+   Name = "Bag | Playground",
+   Callback = function()
+      game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-303, 51, -731)
+   end,
+})
+
+-------daboxer--------------------------------------
+
+local boxerdalataredahood = TeleportsTab:CreateButton({
+   Name = "Da Boxing Club",
+   Callback = function()
+      game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-263, 22, -1126)
+   end,
+})
+
+-------furtdealaautofurtnitures--------------------------------------
+
+local furtnituresdalatare5 = TeleportsTab:CreateButton({
+   Name = "Da Furniture",
+   Callback = function()
+      game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-480, 21, -74)
+   end,
+})
+
+-------basket de ala--------------------------------------
+
+local basketerr51 = TeleportsTab:CreateButton({
+   Name = "Basketball Court",
+   Callback = function()
+      game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-932, 22, -482)
+   end,
+})
+
+-------fitnessdealafortzos--------------------------------------
+
+local fitnesssala = TeleportsTab:CreateButton({
+   Name = "Hood Fitness",
+   Callback = function()
+      game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-77, 22, -633)
+   end,
+})
+
+-------barbershop3--------------------------------------
+
+local Klipzbarber = TeleportsTab:CreateButton({
+   Name = "Klips Barber",
+   Callback = function()
+      game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(9, 21, -107)
+   end,
+})
+
+-------hoodkickser--------------------------------------
+
+local hoodkicker3 = TeleportsTab:CreateButton({
+   Name = "Hood Kicks",
+   Callback = function()
+      game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-222, 21, -412)
+   end,
+})
+
+-------secretlayer--------------------------------------
+
+local secretramer3 = TeleportsTab:CreateButton({
+   Name = "Secret Lair",
+   Callback = function()
+      game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-99, -58, 146)
+   end,
+})
+
+-------doctorhospital--------------------------------------
+
+local hostlerspitalser = TeleportsTab:CreateButton({
+   Name = "Hospital",
+   Callback = function()
+      game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(103, 22, -478)
+   end,
+})
+
+-------parkerwcs--------------------------------------
+
+local wcsipark = TeleportsTab:CreateButton({
+   Name = "Park | Wc",
+   Callback = function()
+      game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(379, 48, -323)
+   end,
+})
+
+-------trainerstation--------------------------------------
+
+local trainstati = TeleportsTab:CreateButton({
+   Name = "Train Station",
+   Callback = function()
+      game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-421, -21, 16)
+   end,
+})
+
+-------mountian--------------------------------------
+
+local mantiandew = TeleportsTab:CreateButton({
+   Name = "Mountian | Safe Place",
+   Callback = function()
+      game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(68, 138, -691)
+   end,
+})
+
+-------------------------------------------------ADMIN BASE----------------------
+local bazucadeadminut = TeleportsTab:CreateButton({
+   Name = "Admin Base",
+   Callback = function()
+      game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-797.15, -39.6189, -887.957)
+   end,
+})
+
+-------------------------------------admincell-+++++++++++++++
+
+local adminceller = TeleportsTab:CreateButton({
+   Name = "Admin Cell",
+   Callback = function()
+      game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-797, -39, -838)
+   end,
+})
+
+-------------------------------------storefoodbank-+++++++++++++++
+
+local fudstore1 = TeleportsTab:CreateButton({
+   Name = "Food Store [Bank]",
+   Callback = function()
+      game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-326, 23, -290)
+   end,
+})
+
+--------------------------foodstore downgun-----------
+local foodsture2 = TeleportsTab:CreateButton({
+   Name = "Food Store",
+   Callback = function()
+   game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(305, 49, -623)
+   end,
+})
+
+--------------------------Hamburger-----------------------
+
+local foodsture2 = TeleportsTab:CreateButton({
+   Name = "Hamburgers",
+   Callback = function()
+   game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-279, 21, -797)
+   end,
+})
+
+-------taacoss--------------------------------------
+
+local tacorsh = TeleportsTab:CreateButton({
+   Name = "Taco Shop",
+   Callback = function()
+      game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(585.96, 51.0917, -479.596)
+   end,
+})
+
+-------foodmarkter--------------------------------------
+
+local foodmarket3 = TeleportsTab:CreateButton({
+   Name = "Foods Markt",
+   Callback = function()
+      game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-907, 22, -665)
+   end,
+})
+
+
+-------gunuper--------------------------------------
+
+local gunzuper = TeleportsTab:CreateButton({
+   Name = "Uphill Gunz",
+   Callback = function()
+      game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(493, 48, -626)
+   end,
+})
+
+-------gunzdownerskids--------------------------------------
+
+local downhellgunz = TeleportsTab:CreateButton({
+   Name = "Downhill Gunz",
+   Callback = function()
+      game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-582, 8, -728)
+   end,
+})
+
+-------rpgsewer--------------------------------------
+
+local rpgerdala3 = TeleportsTab:CreateButton({
+   Name = "RPG",
+   Callback = function()
+      game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(110, -26, -275)
+   end,
+})
+
+-------gernadelaunchershack--------------------------------------
+
+local rpgerdala3 = TeleportsTab:CreateButton({
+   Name = "GrenadeLauncher House",
+   Callback = function()
+      game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-957, -0, 468)
+   end,
+})
+
+
+-----------------------
+-----------------------
+local TabTargets = Window:CreateTab("Target")
+local SectionTargets = TeleportsTab:CreateSection("Target Menu")
+
+-----------------------paragraf de imagine avatar-------------
+
+       ---------------
+       local TargetBox = TabTargets:CreateInput({
+         Name = "Target Username",
+         PlaceholderText = "Username",
+         RemoveTextAfterFocusLost = false,
+         Callback = function(targeterbox)
+            function ShrinkName()
+                   for i,v in pairs(game.Players:GetChildren()) do
+                       if (string.sub(string.lower(v.Name),1,string.len(targeterbox))) == string.lower(targeterbox) then
+                           targeterbox = v.Name
+                       end
+                     end
+                  end
+                     local player = game.Players.LocalPlayer
+                     local target = ShrinkName()
+                  player.Character.HumanoidRootPart.CFrame = CFrame.new(target.Character.UpperTorso.Position)
+               end
+            })
+---------------------------------------------teleporttoplayer------------
+
+local teleporttoButton = TabTargets:CreateButton({
+   Name = "Teleport",
+   Callback = function(teleportplr)
+
+   end,
+})
+
+
+-------------------------------------------------------------
+
+end  ---end la cheacker de gamemode :3   ---SergiuProPwp<3
